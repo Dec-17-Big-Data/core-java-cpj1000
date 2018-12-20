@@ -16,7 +16,7 @@ public class EvaluationService {
 	 */
 	public String reverse(String string) {
 		char[] reversed = new char[string.length()];
-		for (int i = reversed.length - 1, j=0; i >= 0; i--, j++) {
+		for (int i = reversed.length - 1, j = 0; i >= 0; i--, j++) {
 			reversed[j] = string.charAt(i);
 		}
 		return new String(reversed);
@@ -33,9 +33,10 @@ public class EvaluationService {
 	public String acronym(String phrase) {
 		String temp = "";
 		Scanner s = new Scanner(phrase);
+		// Can add to this delimiter, uses only " " and "-" to delimit (based on unit
+		// test cases)
 		s.useDelimiter("[\\s-]");
-		while(s.hasNext())
-		{
+		while (s.hasNext()) {
 			temp += Character.toUpperCase(s.next().charAt(0));
 		}
 		s.close();
