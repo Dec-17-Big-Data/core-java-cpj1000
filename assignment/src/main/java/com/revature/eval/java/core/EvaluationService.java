@@ -93,17 +93,20 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
+			if (this.sideOne == this.sideTwo && this.sideTwo == this.sideThree)
+				return true;
 			return false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
+			if (this.sideOne == this.sideTwo || this.sideTwo == this.sideThree || this.sideOne == this.sideThree)
+				return true;
 			return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			if (!isEquilateral() && !isIsosceles())
+				return true;
 			return false;
 		}
 
@@ -125,8 +128,37 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+
+		string = string.toLowerCase();
+		int score = 0;
+
+		String one = "[aeioulnrst]";
+		String two = "[dg]";
+		String three = "[bcmp]";
+		String four = "[fhvwy]";
+		String five = "[k]";
+		String eight = "[jx]";
+		String ten = "[qz]";
+
+		for (char c : string.toCharArray()) {
+			if ((Character.toString(c)).matches(one)) {
+				score += 1;
+			} else if ((Character.toString(c)).matches(two)) {
+				score += 2;
+			} else if ((Character.toString(c)).matches(three)) {
+				score += 3;
+			} else if ((Character.toString(c)).matches(four)) {
+				score += 4;
+			} else if ((Character.toString(c)).matches(five)) {
+				score += 5;
+			} else if ((Character.toString(c)).matches(eight)) {
+				score += 8;
+			} else if ((Character.toString(c)).matches(ten)) {
+				score += 10;
+			}
+		}
+
+		return score;
 	}
 
 	/**
