@@ -3,6 +3,7 @@ package com.revature.eval.java.core;
 import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class EvaluationService {
 
@@ -30,8 +31,15 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String temp = "";
+		Scanner s = new Scanner(phrase);
+		s.useDelimiter("[\\s-]");
+		while(s.hasNext())
+		{
+			temp += Character.toUpperCase(s.next().charAt(0));
+		}
+		s.close();
+		return temp;
 	}
 
 	/**
