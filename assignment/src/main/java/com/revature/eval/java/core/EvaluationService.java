@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -193,8 +194,26 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		// REGEX TO USE:
+		String regex = "^\\s*[\\+1|1]?[\\(|\\s]*[2-9][0-9]{2}\\)?[\\s|\\-|\\.]*[2-9][0-9]{2}[\\s|\\-|\\.]*[0-9]{4}\\s*";
+
+		if (!string.matches(regex)) {
+			throw new IllegalArgumentException();
+		}
+
+		String number = "";
+		for (char c : string.toCharArray()) {
+			if (Character.isDigit(c)) {
+				number = number + c;
+			}
+		}
+
+		// If number has 11 digits (has US area code), truncate
+		if (number.length() > 10) {
+			number = number.substring(1);
+		}
+
+		return number;
 	}
 
 	/**
@@ -207,8 +226,16 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> wordCount = new HashMap<String, Integer>();
+		String[] splitString = string.split("\\W+");
+		for (String s : splitString) {
+			if (wordCount.containsKey(s)) {
+				wordCount.put(s, (int) wordCount.get(s) + 1);
+			} else {
+				wordCount.put(s, 1);
+			}
+		}
+		return wordCount;
 	}
 
 	/**
@@ -250,8 +277,19 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			int currentIndex = sortedList.size() / 2 - 1;
+			String tString = t.toString();
+			String tempString = sortedList.get(currentIndex).toString();
+
+			if (tString.compareTo(tempString) == 0) {
+				return currentIndex;
+			} else if (tString.compareTo(tempString) > 0) {
+
+			} else if (tString.compareTo(tempString) < 0) {
+
+			}
+
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
