@@ -3,9 +3,11 @@ package com.revature.eval.java.core;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class EvaluationService {
 
@@ -548,8 +550,31 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String temp;
+			String encoded = "";
+			int count = 0;
+			for (int i = 0; i < string.length(); i++) {
+				temp = Character.toString(string.charAt(i));
+				if (temp.matches("[A-Z]")) {
+					temp = temp.toLowerCase();
+				}
+				if (temp.matches("[a-z]")) {
+					if (count >= 5) {
+						encoded += " ";
+						count = 0;
+					}
+					count++;
+					encoded += (char) (219 - (int) (temp.charAt(0)));
+				} else if (temp.matches("[0-9]")) {
+					if (count >= 5) {
+						encoded += " ";
+						count = 0;
+					}
+					count++;
+					encoded += temp;
+				}
+			}
+			return encoded;
 		}
 
 		/**
@@ -559,8 +584,20 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String temp;
+			String decoded = "";
+			for (int i = 0; i < string.length(); i++) {
+				temp = Character.toString(string.charAt(i));
+				if (temp.matches("[A-Z]")) {
+					temp = temp.toLowerCase();
+				}
+				if (temp.matches("[a-z]")) {
+					decoded += (char) (219 - (int) (temp.charAt(0)));
+				} else if (temp.matches("[0-9]")) {
+					decoded += temp;
+				}
+			}
+			return decoded;
 		}
 
 	}
@@ -588,7 +625,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
+		if (string.matches("[0-9X]-[0-9X]{3}-[0-9X]{5}-[0-9X]")) {
+			int multi = 10;
+			int sum = 0;
+			for (int i = 0; i < string.length(); i++) {
+				if (Character.isDigit(string.charAt(i))) {
+					sum += multi * Character.getNumericValue((string.charAt(i)));
+					multi--;
+				} else if (string.charAt(i) == 'X') {
+					sum += multi * 10;
+					multi--;
+				}
+			}
+			if (sum % 11 == 0)
+				return true;
+		}
 		return false;
 	}
 
@@ -606,7 +657,15 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
+		string = string.toLowerCase();
+		Set<Character> alphabet = new HashSet<Character>();
+		for (int i = 0; i < string.length(); i++) {
+			if (string.substring(i, i + 1).matches("[a-z]")) {
+				alphabet.add(string.charAt(i));
+			}
+		}
+		if (alphabet.size() >= 26)
+			return true;
 		return false;
 	}
 
@@ -637,8 +696,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		int temp = 0;
+		Set<Integer> multiples = new HashSet<Integer>();
+		for (int num : set) {
+			while (temp < i) {
+				temp += num;
+				if (temp < i)
+					multiples.add(temp);
+			}
+			temp = 0;
+		}
+
+		int sum = 0;
+		for (Integer j : multiples) {
+			sum += j;
+		}
+
+		return sum;
+
 	}
 
 	/**
@@ -678,8 +753,27 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		if (string.matches("[0-9\\s][0-9\\s]+$")) {
+			StringBuffer temp = new StringBuffer(string.replaceAll("\\s", ""));
+			int tempInt = 0;
+
+			for (int i = temp.length() - 2; i >= 0; i -= 2) {
+				tempInt = 2 * Character.getNumericValue(temp.charAt(i));
+				if (tempInt > 9)
+					tempInt -= 9;
+				temp.setCharAt(i, Character.forDigit(tempInt, 10));
+			}
+
+			tempInt = 0;
+			for (int i = 0; i < temp.length(); i++) {
+				tempInt += Character.getNumericValue(temp.charAt(i));
+			}
+			if (tempInt % 10 == 0)
+				return true;
+			else
+				return false;
+		} else
+			return false;
 	}
 
 	/**
