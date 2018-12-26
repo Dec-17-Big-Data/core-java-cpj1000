@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EvaluationService {
 
@@ -804,8 +806,38 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		String regex = "(-?[1-9]+[0-9]*\\s+(plus|minus|multiplied\\sby|divided\\sby)\\s+-?[1-9]+[0-9]*)";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(string);
+		if (matcher.find()) {
+			String operation = matcher.group(1);
+			System.out.println(operation);
+			Scanner s = new Scanner(operation);
+			int firstNumber = 0;
+			int secondNumber = 0;
+			if (s.hasNextInt()) {
+				firstNumber = s.nextInt();
+			}
+			while (!s.hasNextInt() & s.hasNext()) {
+				s.next();
+			}
+			if (s.hasNextInt()) {
+				secondNumber = s.nextInt();
+			}
+			s.close();
+
+			if (operation.contains("plus")) {
+				return firstNumber + secondNumber;
+			} else if (operation.contains("minus")) {
+				return firstNumber - secondNumber;
+			} else if (operation.contains("multiplied by")) {
+				return firstNumber * secondNumber;
+			} else if (operation.contains("divided by")) {
+				return firstNumber / secondNumber;
+			}
+			return 1;
+		} else
+			return -1;
 	}
 
 }
