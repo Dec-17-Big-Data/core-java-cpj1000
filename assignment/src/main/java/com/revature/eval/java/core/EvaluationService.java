@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -273,20 +274,23 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
+	static class BinarySearch<T extends Comparable<T>> {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			int currentIndex = sortedList.size() / 2 - 1;
-			String tString = t.toString();
-			String tempString = sortedList.get(currentIndex).toString();
+			int low = 0;
+			int high = this.sortedList.size() - 1;
+			int currentIndex = -1;
 
-			if (tString.compareTo(tempString) == 0) {
-				return currentIndex;
-			} else if (tString.compareTo(tempString) > 0) {
-
-			} else if (tString.compareTo(tempString) < 0) {
-
+			while (low <= high) {
+				currentIndex = (low + high) / 2;
+				if (t.compareTo(this.sortedList.get(currentIndex)) == 0) {
+					return currentIndex;
+				} else if (t.compareTo(this.sortedList.get(currentIndex)) < 0) {
+					high = currentIndex - 1;
+				} else if (t.compareTo(this.sortedList.get(currentIndex)) > 0) {
+					low = currentIndex + 1;
+				}
 			}
 
 			return -1;
@@ -325,8 +329,36 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String result = "";
+		String temp;
+		int vowelIndex = 0;
+		Scanner s = new Scanner(string);
+		s.useDelimiter("[\\s]");
+
+		while (s.hasNext()) {
+			vowelIndex = 0;
+			temp = s.next();
+
+			while (!(temp.charAt(vowelIndex) == 'a' || temp.charAt(vowelIndex) == 'e' || temp.charAt(vowelIndex) == 'i'
+					|| temp.charAt(vowelIndex) == 'o' || temp.charAt(vowelIndex) == 'u')) {
+				vowelIndex++;
+			}
+			if (vowelIndex > 0) {
+				if ((temp.charAt(vowelIndex + 1) == 'a' || temp.charAt(vowelIndex + 1) == 'e'
+						|| temp.charAt(vowelIndex + 1) == 'i' || temp.charAt(vowelIndex + 1) == 'o'
+						|| temp.charAt(vowelIndex + 1) == 'u')
+						&& temp.charAt(vowelIndex) != temp.charAt(vowelIndex + 1)) {
+					vowelIndex++;
+				}
+			}
+			result += temp.substring(vowelIndex, temp.length()) + temp.substring(0, vowelIndex) + "ay";
+			if (s.hasNext()) {
+				result += " ";
+			}
+		}
+		s.close();
+		return result;
+
 	}
 
 	/**
@@ -345,8 +377,16 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		int sum = 0;
+		String inputString = ((Integer) input).toString();
+		int digits = inputString.length();
+		for (int i = 0; i < digits; i++) {
+			sum += Math.pow(Character.getNumericValue(inputString.charAt(i)), digits);
+		}
+		if (sum == input)
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -360,8 +400,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> factors = new ArrayList<Long>();
+		while (l % (long) 2 == 0) {
+			l = l / (long) 2;
+			factors.add((long) 2);
+		}
+
+		for (int i = 3; i <= Math.sqrt(l); i += 2) {
+			while (l % (long) i == 0) {
+				l = l / (long) i;
+				factors.add((long) i);
+			}
+		}
+
+		if (l > (long) 1) {
+			factors.add(l);
+		}
+
+		return factors;
 	}
 
 	/**
@@ -399,8 +455,22 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String ciphered = "";
+			int c_ASCII;
+			for (int i = 0; i < string.length(); i++) {
+				c_ASCII = (int) (string.charAt(i));
+				if (c_ASCII >= 65 && c_ASCII <= 90) {
+					c_ASCII += key;
+					if (c_ASCII > 90)
+						c_ASCII = c_ASCII - 26;
+				} else if (c_ASCII >= 97 && c_ASCII <= 122) {
+					c_ASCII += key;
+					if (c_ASCII > 122)
+						c_ASCII = c_ASCII - 26;
+				}
+				ciphered += (char) c_ASCII;
+			}
+			return ciphered;
 		}
 
 	}
@@ -417,9 +487,32 @@ public class EvaluationService {
 	 * @param i
 	 * @return
 	 */
-	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+	public int calculateNthPrime(int i) throws IllegalArgumentException {
+		if (i <= 0) {
+			throw new IllegalArgumentException();
+		}
+
+		int currentNum = 3;
+		boolean isPrime = true;
+
+		List<Integer> primes = new ArrayList<Integer>();
+		primes.add(2);
+
+		// Can be optimized with Math library functions such as Math.sqrt();
+		while (primes.size() < i) {
+			for (int j = 1; j < primes.size(); j++) {
+				if (currentNum % primes.get(j) == 0) {
+					isPrime = false;
+					break;
+				}
+			}
+			if (isPrime) {
+				primes.add(currentNum);
+			}
+			isPrime = true;
+			currentNum += 2;
+		}
+		return primes.get(i - 1);
 	}
 
 	/**
@@ -469,6 +562,7 @@ public class EvaluationService {
 			// TODO Write an implementation for this method declaration
 			return null;
 		}
+
 	}
 
 	/**
